@@ -1,26 +1,421 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Smooth scrolling for better user experience */
+html {
+  scroll-behavior: smooth;
 }
 
 @theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(1 0 0); /* white */
+  --primary-foreground: oklch(0.145 0 0); /* near-black text on white */
+  --secondary: #e6f0ee;
+  --secondary-foreground: #0f1f1d;
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: #16a34a; /* green active color */
+  --accent-foreground: #ffffff; /* white text on green */
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+}
+
+.dark {
+  --background: oklch(0 0 0); /* true black */
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.10 0 0); /* near-black surfaces */
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.10 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(1 0 0); /* white */
+  --primary-foreground: oklch(0.145 0 0); /* near-black */
+  --secondary: oklch(0.12 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.12 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: #16a34a; /* same green active color */
+  --accent-foreground: #ffffff; /* white text on green */
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 16%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }
 
+a {
+  font-weight: 500;
+  color: inherit;
+  text-decoration: inherit;
+}
+
+a:hover {
+  color: inherit;
+}
+
 body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
   background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--secondary);
+  border-radius: 8px;
+  border: 2px solid var(--background);
+}
+
+/* Firefox */
+html, body, .dark {
+  scrollbar-width: thin;
+  scrollbar-color: var(--secondary) var(--background);
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+/* Floating animation for robot image */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px);
+  }
+  25% {
+    transform: translateY(-20px) translateX(5px);
+  }
+  50% {
+    transform: translateY(-10px) translateX(-5px);
+  }
+  75% {
+    transform: translateY(-25px) translateX(3px);
+  }
+}
+
+/* Enhanced floating animation on hover */
+@keyframes float-hover {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px) scale(1.05);
+  }
+  25% {
+    transform: translateY(-30px) translateX(8px) scale(1.05);
+  }
+  50% {
+    transform: translateY(-15px) translateX(-8px) scale(1.05);
+  }
+  75% {
+    transform: translateY(-35px) translateX(5px) scale(1.05);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-hover {
+  animation: float-hover 4s ease-in-out infinite;
+}
+
+/* Galaxy/Starfield animations */
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+@keyframes pulse-slow {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes satellite-1 {
+  0% {
+    transform: translateX(-100px) translateY(0px);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(calc(100vw + 100px)) translateY(-200px);
+    opacity: 0;
+  }
+}
+
+@keyframes satellite-2 {
+  0% {
+    transform: translateX(100px) translateY(0px);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(calc(-100vw - 100px)) translateY(200px);
+    opacity: 0;
+  }
+}
+
+@keyframes satellite-3 {
+  0% {
+    transform: translateX(0px) translateY(-100px);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(300px) translateY(calc(100vh + 100px));
+    opacity: 0;
+  }
+}
+
+@keyframes orbit-1 {
+  0% {
+    transform: rotate(0deg) translateX(150px) rotate(0deg);
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: rotate(360deg) translateX(150px) rotate(-360deg);
+    opacity: 0.4;
+  }
+}
+
+.animate-twinkle {
+  animation: twinkle 3s ease-in-out infinite;
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 8s ease-in-out infinite;
+}
+
+.animate-satellite-1 {
+  animation: satellite-1 20s linear infinite;
+}
+
+.animate-satellite-2 {
+  animation: satellite-2 25s linear infinite;
+}
+
+.animate-satellite-3 {
+  animation: satellite-3 30s linear infinite;
+}
+
+.animate-orbit-1 {
+  animation: orbit-1 15s linear infinite;
+}
+
+/* Planet orbital animations */
+@keyframes orbit-planet-1 {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg) translateX(64px) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg) translateX(64px) rotate(-360deg);
+  }
+}
+
+@keyframes orbit-planet-2 {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg) translateX(48px) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg) translateX(48px) rotate(-360deg);
+  }
+}
+
+@keyframes orbit-planet-3 {
+  0% {
+    transform: translate(-50%, 50%) rotate(0deg) translateX(40px) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, 50%) rotate(360deg) translateX(40px) rotate(-360deg);
+  }
+}
+
+@keyframes orbit-moon-1 {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg) translateX(20px) rotate(0deg);
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg) translateX(20px) rotate(-360deg);
+    opacity: 0.6;
+  }
+}
+
+@keyframes orbit-moon-2 {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg) translateX(15px) rotate(0deg);
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg) translateX(15px) rotate(-360deg);
+    opacity: 0.5;
+  }
+}
+
+@keyframes orbit-moon-3 {
+  0% {
+    transform: translate(-50%, 50%) rotate(0deg) translateX(12px) rotate(0deg);
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate(-50%, 50%) rotate(360deg) translateX(12px) rotate(-360deg);
+    opacity: 0.4;
+  }
+}
+
+@keyframes float-planet {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px) scale(1);
+    opacity: 0.3;
+  }
+  25% {
+    transform: translateY(-30px) translateX(20px) scale(1.1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(-15px) translateX(-15px) scale(0.9);
+    opacity: 0.4;
+  }
+  75% {
+    transform: translateY(-35px) translateX(10px) scale(1.05);
+    opacity: 0.5;
+  }
+}
+
+.animate-orbit-planet-1 {
+  animation: orbit-planet-1 25s linear infinite;
+}
+
+.animate-orbit-planet-2 {
+  animation: orbit-planet-2 20s linear infinite;
+}
+
+.animate-orbit-planet-3 {
+  animation: orbit-planet-3 18s linear infinite;
+}
+
+.animate-orbit-moon-1 {
+  animation: orbit-moon-1 8s linear infinite;
+}
+
+.animate-orbit-moon-2 {
+  animation: orbit-moon-2 6s linear infinite;
+}
+
+.animate-orbit-moon-3 {
+  animation: orbit-moon-3 5s linear infinite;
+}
+
+.animate-float-planet {
+  animation: float-planet 12s ease-in-out infinite;
 }
